@@ -1,6 +1,7 @@
 
-import React, { useEffect,useContext } from "react";
-
+import React, { useEffect,useContext ,useState} from "react";
+import CommentForm from './CommentForm'
+import CommentItem from './CommentItem'
 import { Container, Row, Col, Image } from "react-bootstrap";
 import Paper from "@material-ui/core/Paper";
 import { Typography } from "@material-ui/core";
@@ -19,8 +20,11 @@ const ShowPost = ({ match }) => {
   const postContext=useContext(PostContext)
   const {GetPostBypost,posts}=postContext
 console.log(posts);
+
+
   useEffect(() => {
     GetPostBypost(match.params.id);
+   
   }, []);
 
   console.log(posts);
@@ -65,10 +69,17 @@ console.log(posts);
           <Typography variant="h5" paragraph="true" color="initial">
             {posts.message}
           </Typography>
-          {/*<Typography variant="h5" paragraph="true" color="initial">
-            <ReactMarkdown source={posts.sanitizedHtml} />
-  </Typography>*/}
+
+  <CommentForm postId={posts._id} />
+      <div className='comments'>
+        {posts.comments &&posts.comments.map(comment => (
+          <CommentItem key={comment._id} comment={comment} postId={posts._id} />
+        ))}
+      </div>
         </Paper>
+        
+        
+
       </div>
     </>
   );

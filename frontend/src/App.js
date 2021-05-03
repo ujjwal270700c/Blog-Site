@@ -28,7 +28,7 @@ function App() {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/auth" component={Auth} />
-               <ProtectRoute exact path="/profile" component={Profile} />
+               <ProtectRoute  exact path="/profile" component={Profile} />
                <ProtectRoute path="/post/:id" component={PostDetails} />
              
               <ProtectRoute exact path="/create-post" component={Form} /> 

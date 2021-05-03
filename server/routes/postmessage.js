@@ -4,6 +4,8 @@ const PostMessage = require('../models/postMessage');
 const Employ=require('../models/employ')
 const auth =require('../middlewares/auth')
 const mongoose=require('mongoose')
+const User =require('../models/usermodel')
+const {check,validationResult} =require('express-validator')
 
 
 router.get("/", async (req, res) => { 
@@ -115,6 +117,7 @@ router.delete("/:id",auth, async (req, res) => {
 
     res.json({ message: "Post deleted successfully." });
 });
+
 router.patch("/:id/likePost",auth,async (req, res) => {
     const { id } = req.params;
 
@@ -136,5 +139,95 @@ router.patch("/:id/likePost",auth,async (req, res) => {
     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
     res.status(200).json(updatedPost);
 });
-
+router.post(
+    '/comment/:id',
+    [
+      auth,
+      [
+        check('text', 'Text is required')
+          .not()
+          .isEmpty()
+      ]
+    ],
+    async (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array()
+        });
+      }
+  
+      try {
+          console.log('sdvsdvsdvs');
+        const user = await User.findById(req.user.id).select('-password');
+        const post = await PostMessage.findById(req.params.id);
+  
+        const newComment = {
+          text: req.body.text,
+          name: user.name,
+        
+          user: req.user.id
+        };
+  
+        post.comments.unshift(newComment);
+  
+        await post.save();
+  
+        res.json(post.comments);
+      } catch (err) {
+        console.error(err.message);
+  
+        if (err.kind === 'ObjectId') {
+          return res.status(404).json({ msg: 'Post not found to comment on' });
+        }
+  
+        res.status(500).send('Server Error Horace');
+      }
+    }
+  );
+  
+  //@route   Delete api/posts/comment/:id/:comment_id
+  //@desc    Delete comment on post
+  //@access  Private
+  router.delete('/comment/:id/:comment_id', auth, async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id);
+  
+      // Pull out comment
+      const comment = post.comments.find(
+        comment => comment.id === req.params.comment_id
+      );
+  
+      //Make sure comment exists
+      if (!comment) {
+        return res.status(404).json({ msg: 'Comment does not exist.' });
+      }
+  
+      //Check user
+      if (comment.user.toString() !== req.user.id) {
+        return res.status(401).json({ msg: 'User not authorized' });
+      }
+  
+      //Get remove index
+      const removeIndex = post.comments
+        .map(comment => comment.id)
+        .indexOf(req.params.comment_id);
+  
+      post.comments.splice(removeIndex, 1);
+  
+      await post.save();
+  
+      res.json(post.comments);
+    } catch (err) {
+      console.error(err.message);
+  
+      if (err.kind === 'ObjectId') {
+        return res
+          .status(404)
+          .json({ msg: 'Comment on the post does not exist' });
+      }
+  
+      res.status(500).send('Server Error Marcus');
+    }
+  });
 module.exports = router;

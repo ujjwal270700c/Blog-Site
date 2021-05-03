@@ -13,12 +13,13 @@ import {
   CLEAR_FILTER_POST,
   GET_POSTBYUSER,
   LIKE,
-  GET_POSTBYPOST
+  GET_POSTBYPOST,ADD_COMMENT,REMOVE_COMMENT,POST_ERROR
 } from "../auth/action";
 
 const PostState = (props) => {
   const initialState = {
     posts: [],
+    post:null,
     current: null,
     filtered:null
   };
@@ -130,10 +131,59 @@ const PostState = (props) => {
   const clearFilter=(text)=>{
     dispatch({ type: CLEAR_FILTER_POST, payload: text });
   }
+  const addComment = async(postId, formData) => {
+    console.log(postId,formData);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+  
+    try {
+      const res = await axios.post(
+        `http://localhost:5002/api/posts/comment/${postId}`,
+        formData,
+        config
+      );
+  
+      dispatch({
+        type: ADD_COMMENT,
+        payload: res.data
+      });
+  
+    
+    } catch (err) {
+      dispatch({
+        type: POST_ERROR,
+        payload: { msg: err.response.statusText, status: err.response.status }
+      });
+    }
+  };
+  
+  // Delete comment
+   const deleteComment = async(postId, commentId) => {
+    try {
+      await axios.delete(`http://localhost:5002/api/posts/comment/${postId}/${commentId}`);
+  
+      dispatch({
+        type: REMOVE_COMMENT,
+        payload: commentId
+      });
+  
+    
+    } catch (err) {
+      dispatch({
+        type: POST_ERROR,
+        payload: { msg: err.response.statusText, status: err.response.status }
+      });
+    }
+  };
+  
   return (
     <PostContext.Provider
       value={{
         posts: state.posts,
+        post: state.post,
         current: state.current,
         filtered:state.filtered,
         AddPost,
@@ -146,7 +196,7 @@ const PostState = (props) => {
         likePost,
         filterPost,
         clearFilter,
-        GetPostBypost
+        GetPostBypost,addComment,deleteComment
       }}
     >
       {props.children}

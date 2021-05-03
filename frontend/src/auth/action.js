@@ -19,3 +19,6 @@ export const CLEAR_ALERT='CLEAR_ALERT';
 export const GET_POST='GET_POST';
 export const GET_POSTBYUSER='GET_POSTBYUSER';
 export const GET_POSTBYPOST='GET_POSTBYPOST';
+export const ADD_COMMENT = 'ADD_COMMENT';
+export const REMOVE_COMMENT = 'REMOVE_COMMENT';
+export const POST_ERROR='POST_ERROR'

@@ -9,7 +9,7 @@ import {
   CLEAR_FILTER_POST,
   GET_POSTBYUSER,
   LIKE,
-  GET_POSTBYPOST
+  GET_POSTBYPOST,ADD_COMMENT,REMOVE_COMMENT,POST_ERROR
 } from "../auth/action";
 export default (state, action) => {
   switch (action.type) {
@@ -84,6 +84,23 @@ export default (state, action) => {
             ...state,
             filtered:null
           }
+          case ADD_COMMENT:
+            return {
+              ...state,
+              post: { ...state.post, comments: action.payload },
+              loading: false
+            };
+          case REMOVE_COMMENT:
+            return {
+              ...state,
+              post: {
+                ...state.post,
+                comments: state.post.comments.filter(
+                  comment => comment._id !== action.payload
+                )
+              },
+              loading: false
+            };
     default:
       return state;
   }
