@@ -32,7 +32,7 @@ const AuthState = (props) => {
             AuthToken(localStorage.token)
         }
         try {
-            const res=await axios.post('https://memoriesappbyujjwal.herokuapp.com/api/auth')
+            const res=await axios.post('https://blog-app334.herokuapp.com/api/auth')
             dispatch({
                 type:LOAD_USER,
                 payload:res.data
@@ -55,7 +55,7 @@ const AuthState = (props) => {
         }
         console.log(formData);
         try {
-            const res=await axios.post('http://localhost:5002/api/users',formData,config);
+            const res=await axios.post('/api/users',formData,config);
             console.log(res);
             dispatch({
                 type:REGISTER_USER,

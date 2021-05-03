@@ -7,9 +7,18 @@ const port =process.env.PORT || 5002
 app.use(cors())
 app.use(bodyParser.json({limit: '30mb',extended:false}));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
-app.get('/',(req,res)=>{
-    res.send("welcome");
-})
+
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "/frontend/build")));
+    app.get("*", (req, res) => {
+      res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
+    });
+  } else {
+    app.get("/", (req, res) => {
+      res.send("API is running....");
+    });
+  }
 
 // app.use(express.static(path.join(__dirname, "/frontend/build")));
 //   app.get('/',(req,res)=>{

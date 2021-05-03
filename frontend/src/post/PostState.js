@@ -32,7 +32,7 @@ const PostState = (props) => {
       },
     };
     try {
-      await axios.post("http://localhost:5002/api/posts", post, config);
+      await axios.post("https://blog-app334.herokuapp.com/api/posts", post, config);
       dispatch({
         type: ADD_POST,
         payload: post,
@@ -48,7 +48,7 @@ const PostState = (props) => {
       },
     };
     try {
-      const res = await axios.get("http://localhost:5002/api/posts", config);
+      const res = await axios.get("https://blog-app334.herokuapp.com/api/posts", config);
       dispatch({
         type: GET_POST,
         payload: res.data,
@@ -60,7 +60,7 @@ const PostState = (props) => {
   const GetPostByUser = async (id) => {
     console.log(id);
     try {
-      const res = await axios.get(`http://localhost:5002/api/posts/${id}`);
+      const res = await axios.get(`https://blog-app334.herokuapp.com/api/posts/${id}`);
       console.log(res.data);
       dispatch({
         type: GET_POSTBYUSER,
@@ -73,7 +73,7 @@ const PostState = (props) => {
   const GetPostBypost = async (id) => {
     console.log(id);
     try {
-      const res = await axios.get(`http://localhost:5002/api/posts/${id}/bypost`);
+      const res = await axios.get(`https://blog-app334.herokuapp.com/api/posts/${id}/bypost`);
       console.log(res.data);
       dispatch({
         type: GET_POSTBYPOST,
@@ -86,7 +86,7 @@ const PostState = (props) => {
   const deletePost = async (_id) => {
     try {
       console.log(_id, "ahscjgasvcgav");
-      await axios.delete(`http://localhost:5002/api/posts/${_id}`);
+      await axios.delete(`https://blog-app334.herokuapp.com/api/posts/${_id}`);
       dispatch({ type: DELETE_POST, payload: _id });
     } catch (error) {
       console.log(error);
@@ -106,7 +106,7 @@ const PostState = (props) => {
     };
     try {
       console.log(post._id, "ahscjgasvcgav");
-      const res = await axios.patch(`http://localhost:5002/api/posts/${post._id}`, post, config);
+      const res = await axios.patch(`https://blog-app334.herokuapp.com/api/posts/${post._id}`, post, config);
       dispatch({ type: UPDATE_POST, payload: res.data });
     } catch (error) {
       console.log(error);
@@ -119,7 +119,7 @@ const PostState = (props) => {
       },
     };
     try {
-      const res = await axios.patch(`http://localhost:5002/api/posts/${_id}/likePost`, config);
+      const res = await axios.patch(`https://blog-app334.herokuapp.com/api/posts/${_id}/likePost`, config);
       dispatch({ type: LIKE, payload: res.data });
     } catch (error) {
       console.log(error);
@@ -141,7 +141,7 @@ const PostState = (props) => {
   
     try {
       const res = await axios.post(
-        `http://localhost:5002/api/posts/comment/${postId}`,
+        `https://blog-app334.herokuapp.com/api/posts/comment/${postId}`,
         formData,
         config
       );
@@ -163,7 +163,7 @@ const PostState = (props) => {
   // Delete comment
    const deleteComment = async(postId, commentId) => {
     try {
-      await axios.delete(`http://localhost:5002/api/posts/comment/${postId}/${commentId}`);
+      await axios.delete(`https://blog-app334.herokuapp.com/api/posts/comment/${postId}/${commentId}`);
   
       dispatch({
         type: REMOVE_COMMENT,
