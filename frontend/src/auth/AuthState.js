@@ -15,6 +15,10 @@ import {
     AUTH_ERROR
 } from "./action";
 
+if (localStorage.token) {
+    AuthToken(localStorage.token);
+    console.log('tokensakjbcvaskbvcas');
+  }
 const AuthState = (props) => {
    
     const initialState={

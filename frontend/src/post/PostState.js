@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
 import PostContext from "./PostContext";
 import PostReducer from "./PostReducer";
+import AuthToken from '../auth/AuthToken'
 import axios from "axios";
 import {
   ADD_POST,
@@ -16,6 +17,10 @@ import {
   GET_POSTBYPOST,ADD_COMMENT,REMOVE_COMMENT,POST_ERROR
 } from "../auth/action";
 
+if (localStorage.token) {
+  AuthToken(localStorage.token);
+  console.log('tokensakjbcvaskbvcas');
+}
 const PostState = (props) => {
   const initialState = {
     posts: [],
